@@ -1,0 +1,120 @@
+<div class="container">
+  <ng-container *transloco="let t">
+    <section style="border-color: rgb(92, 118, 205) solid 1px; height:100vh">
+      <select (change)="changeLang($event)" class="custom-select select-selected" style="width:200px; margin-top:5rem">
+        <option value="EN">English</option>
+        <option value="ES">Espana</option>
+        <option value="RU">pyccknn</option>
+        <option value="HE">עברית</option>
+      </select>
+      <div style="margin-top:10rem;" *ngIf="!pin ||( pin > 9999 || pin< 999)" class="formStyle">
+        <label style="margin-right:1rem">{{ 'pinRequest' | transloco}}</label>
+        <input id="pin" type="number" [(ngModel)]="pin">
+
+      </div>
+      <div *ngIf="pin &&(pin < 9999 && pin > 999) ">
+        <h1 style="color:navy">{{ 'welcomeMsg'|transloco }}</h1>
+
+        <div style="display:inline-grid; margin-left:4rem;" *ngIf="!cw && !be && !pc && !fc">
+          <button class="button" style=" margin-right:4em" (click)="cw= true;successPwd= false;successTransC=false;
+          fastCash=false">{{ 'CashWithdrwal'|transloco }}</button>
+          <button class="button" style=" margin-right:4em" (click)="be=!be">{{ 'BalanceEnquiry'|transloco }}</button>
+          <button class="button" style=" margin-right:4em" (click)="pc= true; successTransC=false;
+          successTransCW=false;fastCash=false">{{ 'PasswordChange'|transloco }}</button>
+          <button class="button" style=" margin-right:4em"
+            (click)="fc= true; successTransCW= false;successTransC= false;fastCash=false;successPwd=false">{{ 'fastCash'|transloco }}</button>
+        </div>
+      </div>
+      <div *ngIf="pin &&( pin > 9999 || pin< 999) ">
+        <h4 style="color:red">{{ 'InvalidMsg'|transloco }}</h4>
+      </div>
+      <div *ngIf="cw" class="formStyle">
+        <label style="margin-right:1rem">{{ 'AmountInput' | transloco}}</label>
+        <p>100 X <input id="amount" type="number" [(ngModel)]="amount"> = {{100 * amount}}</p>
+        <p>500 X <input id="amount1" type="number" [(ngModel)]="amount1"> = {{500 * amount1}}</p>
+        <span class="msg">{{ 'totalWithdrawal' | transloco}}: {{ (100 * amount) + (500 * amount1) | translocoCurrency }}
+        </span>
+        <p><button class="button"
+            (click)="cw= false;successTransCW= true;successTransC= false;fastCash=false;successPwd=false">{{'submit' | transloco}}</button>
+        </p>
+      </div>
+      <div *ngIf="be" class="formStyle">
+        <span class="msg">{{'balanceDetails' | transloco}}{{ 1000 | translocoCurrency: 'name' }} </span>
+        <div style="margin-right:5em">
+          <h4 style="margin-left:29%">{{ 'reciept' | transloco}} </h4>
+          <span style="margin-left:29%"><button class="button2" (click)="be=false;successPwd= false; successTransC=false;
+          successTransCW=false;fastCash=false">{{ 'yes' | transloco}}</button>
+            <button class="button2" (click)="be=false;successPwd= false; successTransC=false;
+          successTransCW=false;fastCash=false">{{ 'no' | transloco}}</button></span>
+        </div>
+      </div>
+      <div *ngIf="pc" class="formStyle">
+        <label style="margin-right:1rem">{{ 'newPassword' | transloco}}</label>
+        <input id="pwd" type="text" [(ngModel)]="pwd">
+        <p><button class="button" (click)="pc= false;successPwd= true; successTransC=false;
+          successTransCW=false;fastCash=false">{{'submit' | transloco}}</button></p>
+      </div>
+
+      <div *ngIf="fc" class="formStyle">
+        <label style="margin-right:1rem">{{ 'fastCashMsg' | transloco}}</label>
+        <input id="cash" type="number" style="margin-top:1rem" [(ngModel)]="cash">
+        <p><button class="button"
+            (click)="fc= false;fastCash= true; successTransC= false; successTransCW=false;successPwd=false">{{'submit' | transloco}}</button>
+        </p>
+      </div>
+      <div *ngIf="successPwd && !be">
+        <p> <span class="msg">{{'successPwd' | transloco}}</span> </p>
+      </div>
+      <div *ngIf="successTransC && !be">
+        <p> <span class="msg">{{'successTransC' | transloco}}</span> </p>
+      </div>
+      <div *ngIf="successTransCW && !be">
+        <p>
+          <span class="msg">
+            {{'successTransCW' | transloco: {count:((100 * amount) + (500 * amount1)| translocoCurrency: 'symbol' : { minimumFractionDigits: 0 })}
+          }}
+          </span>
+        </p>
+      </div>
+      <div *ngIf="fastCash && !be">
+        <p> <span class="msg">
+            {{'fastCashW' | transloco: {
+            value:(cash| translocoCurrency: 'symbol' : { minimumFractionDigits: 0 }),
+            cal: ( date | translocoDate: { dateStyle: 'medium', timeStyle: 'medium'})
+           } }}
+          </span></p>
+        <!-- <p>
+          {{ 1 | translocoDate: { dateStyle: 'medium' } }}
+        </p> -->
+
+      </div>
+      <span class="footer">
+        {{ date | translocoDate: { timeZone: 'UTC', timeStyle: 'full' } }}
+      </span>
+    </section>
+    <!-- <ul>
+      <li>{{ 'noParams' | transloco }}</li>
+      <li>{{ 'params' | transloco: {value: "word" } }}</li>
+      <li>{{ 'plural' | transloco: {count: 2} }}</li>
+      <li>{{ 'plural' | transloco: {count: 1} }}</li>
+      <li>{{ 'gender' | transloco: {gender: "male"} }}</li>
+      <li>{{ 'gender' | transloco: {gender: ""} }}</li>
+    </ul>
+    Hello - english
+    The following word was replaced by Transloco - english
+    2 results - english
+    one result - english
+    he went to the shop - english
+    they went to the shop - english -->
+    <!-- <p style="border-bottom: 1rem;">{{ date | translocoDate }}</p>
+    {{ '2019-02-08' | translocoDate: { dateStyle: 'medium' } }} -->
+
+    <!-- <span>
+      {{ 1234567890 | translocoDecimal }}
+    </span>
+    <span>
+      {{ 1234567890 | translocoDecimal: {useGrouping: false} }}
+    </span> -->
+
+  </ng-container>
+</div>
